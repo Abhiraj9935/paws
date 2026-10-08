@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+  <meta charset="UTF-8">
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
+
+  <title>Animal Profile | PAW Guardian</title>
+
+  <link rel="stylesheet" href="style.css">
+
+</head>
+
+
+<body>
+
+  <!-- HEADER -->
+
+  <header>
+
+    <div class="logo">
+      🐾 PAW Guardian
+    </div>
+
+    <nav>
+      <a href="index.html">Home</a>
+      <a href="owner.html">Register</a>
+      <a href="animal.html">Animal</a>
+    </nav>
+
+  </header>
+
+
+  <!-- ANIMAL SEARCH -->
+
+  <section class="animal-section">
+
+    <div class="form-container">
+
+      <h1>🔍 Find an Animal</h1>
+
+      <p class="subtitle">
+        Enter the Animal ID or scan the animal's QR code.
+      </p>
+
+
+      <label for="lookupId">
+        Animal ID
+      </label>
+
+      <input
+        type="text"
+        id="lookupId"
+        placeholder="Example: DOG-KNP-001"
+      >
+
+
+      <button
+        id="lookupButton"
+        class="btn primary full"
+        type="button"
+      >
+        🔍 Find Animal
+      </button>
+
+
+      <div
+        id="lookupResult"
+        style="margin-top: 25px;"
+      ></div>
+
+    </div>
+
+
+    <!-- ANIMAL DETAILS -->
+
+    <div
+      id="animalDetails"
+      style="margin-top: 30px;"
+    ></div>
+
+  </section>
+
+
+  <footer>
+    © 2026 PAW Guardian
+  </footer>
+
+
+  <script
+    type="module"
+    src="animal.js"
+  ></script>
+
+</body>
+
+</html>

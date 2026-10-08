@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PAW Guardian - Owner</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<header>
+  <div class="logo">🐾 PAW Guardian</div>
+
+  <nav>
+    <a href="index.html">Home</a>
+    <a href="owner.html">Owner</a>
+    <a href="animal.html">Animal</a>
+  </nav>
+</header>
+
+
+<!-- =====================================================
+     1. REGISTER NEW ANIMAL
+====================================================== -->
+
+<section class="form-section">
+
+  <div class="form-container">
+
+    <h1>🐾 Register New Animal</h1>
+
+    <p>
+      Anyone can register an animal and generate its QR code.
+    </p>
+
+    <form id="animalForm">
+
+      <label>Animal ID *</label>
+      <input
+        type="text"
+        id="animalId"
+        placeholder="DOG-KNP-001"
+        required
+      >
+
+      <label>Animal Name *</label>
+      <input
+        type="text"
+        id="animalName"
+        placeholder="Bruno"
+        required
+      >
+
+      <label>Species *</label>
+      <select id="species" required>
+        <option value="">Select Species</option>
+        <option value="Dog">Dog</option>
+        <option value="Cat">Cat</option>
+        <option value="Cow">Cow</option>
+        <option value="Other">Other</option>
+      </select>
+
+      <label>Breed</label>
+      <input
+        type="text"
+        id="breed"
+        placeholder="Labrador"
+      >
+
+      <label>Birth Date</label>
+      <input
+        type="date"
+        id="birthDate"
+      >
+
+      <label>Age</label>
+      <input
+        type="text"
+        id="age"
+        placeholder="2 years"
+      >
+
+      <label>Gender</label>
+      <select id="gender">
+        <option value="">Select Gender</option>
+        <option value="Male">Male</option>
+        <option value="Female">Female</option>
+      </select>
+
+      <label>Owner / Caretaker</label>
+      <input
+        type="text"
+        id="ownerName"
+        placeholder="Abc Rescue"
+      >
+
+      <label>Mobile Number *</label>
+      <input
+        type="tel"
+        id="phone"
+        placeholder="9998768756"
+        required
+      >
+
+      <label>Address</label>
+      <textarea
+        id="address"
+        placeholder="Enter address"
+      ></textarea>
+
+      <label>Medical Information</label>
+      <textarea
+        id="medical"
+        placeholder="No major history"
+      ></textarea>
+
+      <label>Vaccination</label>
+      <input
+        type="text"
+        id="vaccination"
+        placeholder="Rabies"
+      >
+
+      <label>Notes</label>
+      <textarea
+        id="notes"
+        placeholder="Friendly dog"
+      ></textarea>
+
+      <label>Photo URL</label>
+      <input
+        type="url"
+        id="photoUrl"
+        placeholder="https://..."
+      >
+
+      <button
+        type="submit"
+        class="btn primary full"
+      >
+        🐾 Submit Animal Details
+      </button>
+
+    </form>
+
+    <div id="formStatus"></div>
+
+
+    <!-- QR CREATED AFTER SUBMIT -->
+
+    <div
+      id="qrSection"
+      style="display:none; text-align:center; margin-top:30px;"
+    >
+
+      <hr>
+
+      <h2>✅ Animal Registered</h2>
+
+      <p>Your QR code has been generated.</p>
+
+      <div
+        id="qrcode"
+        style="
+          display:flex;
+          justify-content:center;
+          margin:20px;
+        "
+      ></div>
+
+      <p id="qrAnimalId"></p>
+
+      <a
+        id="animalPageLink"
+        class="btn secondary"
+        target="_blank"
+      >
+        Open Animal Profile
+      </a>
+
+    </div>
+
+  </div>
+
+</section>
+
+
+
+<!-- =====================================================
+     2. OWNER ACCESS
+====================================================== -->
+
+<section class="form-section">
+
+  <div class="form-container">
+
+    <h1>🔐 Owner Access</h1>
+
+    <p>
+      Already registered? Enter your Animal ID and
+      registered mobile number to access the details.
+    </p>
+
+    <form id="ownerAccessForm">
+
+      <label>Animal ID</label>
+
+      <input
+        type="text"
+        id="accessAnimalId"
+        placeholder="DOG-KNP-001"
+        required
+      >
+
+      <label>Registered Mobile Number</label>
+
+      <input
+        type="tel"
+        id="accessPhone"
+        placeholder="9998768756"
+        required
+      >
+
+      <button
+        type="submit"
+        class="btn primary full"
+      >
+        🔓 Access Animal
+      </button>
+
+    </form>
+
+    <div id="accessStatus"></div>
+
+
+    <!-- EDIT DETAILS AFTER VERIFICATION -->
+
+    <div
+      id="ownerDetails"
+      style="display:none; margin-top:30px;"
+    >
+
+      <hr>
+
+      <h2>🐾 Edit Animal Details</h2>
+
+      <label>Animal ID</label>
+      <input
+        type="text"
+        id="editAnimalId"
+        readonly
+      >
+
+      <label>Animal Name</label>
+      <input
+        type="text"
+        id="editAnimalName"
+      >
+
+      <label>Species</label>
+      <input
+        type="text"
+        id="editSpecies"
+      >
+
+      <label>Breed</label>
+      <input
+        type="text"
+        id="editBreed"
+      >
+
+      <label>Birth Date</label>
+      <input
+        type="date"
+        id="editBirthDate"
+      >
+
+      <label>Age</label>
+      <input
+        type="text"
+        id="editAge"
+      >
+
+      <label>Gender</label>
+      <input
+        type="text"
+        id="editGender"
+      >
+
+      <label>Owner / Caretaker</label>
+      <input
+        type="text"
+        id="editOwnerName"
+      >
+
+      <label>Mobile Number</label>
+      <input
+        type="tel"
+        id="editPhone"
+      >
+
+      <label>Address</label>
+      <textarea id="editAddress"></textarea>
+
+      <label>Medical Information</label>
+      <textarea id="editMedical"></textarea>
+
+      <label>Vaccination</label>
+      <input
+        type="text"
+        id="editVaccination"
+      >
+
+      <label>Notes</label>
+      <textarea id="editNotes"></textarea>
+
+      <label>Photo URL</label>
+      <input
+        type="url"
+        id="editPhotoUrl"
+      >
+
+      <button
+        type="button"
+        id="saveOwnerChanges"
+        class="btn primary full"
+      >
+        💾 Save Changes
+      </button>
+
+      <div id="editStatus"></div>
+
+    </div>
+
+  </div>
+
+</section>
+
+
+<footer>
+  © 2026 PAW Guardian
+</footer>
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+
+<script
+  type="module"
+  src="app.js">
+</script>
+
+</body>
+</html>
