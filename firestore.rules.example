@@ -1,0 +1,33 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    function signedIn() { return request.auth != null; }
+    function isAdmin() { return signedIn() && request.auth.token.admin == true; }
+    match /animals/{animalId} {
+      // Public animal QR/owner lookup needs reads. Keep sensitive data out of these documents.
+      allow read: if true;
+      allow create: if request.resource.data.keys().hasAll(['animalId','animalName','phone','species','ownerName'])
+        && request.resource.data.animalId is string && request.resource.data.animalId.size() <= 32
+        && request.resource.data.phone is string && request.resource.data.phone.size() >= 8
+        && request.resource.data.phone.size() <= 16
+        && request.resource.data.animalName is string && request.resource.data.animalName.size() > 0
+        && request.resource.data.ownerName is string && request.resource.data.ownerName.size() > 0;
+      allow update, delete: if false;
+    }
+    match /clinicSubmissions/{submissionId} {
+      allow create: if request.resource.data.keys().hasOnly(['photoUrl','storagePath','status','submittedAt'])
+        && request.resource.data.status == 'pending-review'
+        && request.resource.data.photoUrl is string
+        && request.resource.data.storagePath is string;
+      allow read, update, delete: if isAdmin();
+    }
+    match /emergencies/{emergencyId} {
+      allow create: if request.resource.data.status == 'new'
+        && request.resource.data.source == 'public-qr'
+        && request.resource.data.keys().hasOnly(['animalId','animalName','species','ownerUid','incidentType','notes','status','createdAt','source','latitude','longitude','photoUrl']);
+      allow read, update, delete: if isAdmin();
+    }
+    match /owners/{uid} { allow read, write: if signedIn() && request.auth.uid == uid; }
+    match /vets/{uid} { allow read, write: if signedIn() && request.auth.uid == uid; }
+  }
+}

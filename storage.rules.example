@@ -1,0 +1,19 @@
+rules_version = '2';
+service firebase.storage {
+  match /b/{bucket}/o {
+    // Prototype uploads are public because the requested forms have no login.
+    // Do not use for sensitive production data without App Check, rate limits, and server-side review.
+    match /animal-photos/{animalId}/{fileName} {
+      allow write: if request.resource != null && request.resource.size < 8 * 1024 * 1024 && request.resource.contentType.matches('image/.*');
+      allow read: if true;
+    }
+    match /clinic-photos/{submissionId}/{fileName} {
+      allow write: if request.resource != null && request.resource.size < 8 * 1024 * 1024 && request.resource.contentType.matches('image/.*');
+      allow read: if true;
+    }
+    match /emergency-photos/{emergencyId}/{fileName} {
+      allow write: if request.resource != null && request.resource.size < 8 * 1024 * 1024 && request.resource.contentType.matches('image/.*');
+      allow read: if true;
+    }
+  }
+}

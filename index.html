@@ -1,95 +1,74 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>PAW Guardian</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#102d25">
+  <meta name="description" content="PAWS AI Guardian Passport: animal identification, QR profiles, SOS reports and rescue coordination.">
+  <title>PAWS AI — Guardian Passport</title>
   <link rel="stylesheet" href="style.css">
 </head>
-
-<body>
-
-<header>
-  <div class="logo">🐾 PAW Guardian</div>
-
-  <nav>
-    <a href="index.html">Home</a>
-    <a href="owner.html">Owner</a>
-    <a href="animal.html">Animal</a>
+<body class="home-page">
+<header class="site-header">
+  <a class="brand" href="index.html"><span class="brand-mark">✳</span><span>PAWS<span class="brand-ai">AI</span><small>GUARDIAN PASSPORT</small></span></a>
+  <nav aria-label="Main navigation">
+    <a class="nav-current" href="index.html">Home</a>
+    <a href="register-animal.html">Register animal</a>
+    <a href="owner.html">Owner portal</a>
+    <a href="vet.html">Clinic photo</a>
+    <a href="animal.html">Scan / SOS</a>
   </nav>
+  <a class="header-cta" href="register-animal.html">Create a passport <span>↗</span></a>
 </header>
-
-<section class="hero">
-
-  <div class="hero-text">
-    <span class="badge">SMART ANIMAL SAFETY SYSTEM</span>
-
-    <h1>
-      Protect Every Paw.<br>
-      <span>Respond Faster.</span>
-    </h1>
-
-    <p>
-      PAW Guardian connects animals with their owners through
-      QR identification, emergency information and SOS alerts.
-    </p>
-
-    <div class="buttons">
-      <a href="owner.html" class="btn primary">
-        Register Animal
-      </a>
-
-      <a href="animal.html" class="btn secondary">
-        Find Animal
-      </a>
+<main>
+  <section class="home-hero">
+    <div class="hero-copy">
+      <div class="status-label"><span class="status-dot"></span> A smarter safety net for animals</div>
+      <p class="hero-kicker">IDENTIFY. PROTECT. RECONNECT.</p>
+      <h1>Every animal deserves a <em>way home.</em></h1>
+      <p class="hero-description">One simple digital passport can help people identify an animal, find its public profile, and share an SOS report when help is needed.</p>
+      <div class="hero-actions"><a class="button button-dark" href="register-animal.html">＋ Register an animal <span>→</span></a><a class="text-link" href="animal.html">I found an animal <span>↗</span></a></div>
+      <div class="hero-note"><span class="note-icon">✓</span><span><strong>Built around the animal</strong><br>Useful details first. Rescue actions easy to find.</span></div>
     </div>
-  </div>
+    <div class="passport-art" aria-label="Illustration of an animal safety passport">
+      <div class="art-orbit orbit-one"></div><div class="art-orbit orbit-two"></div>
+      <div class="floating-tag tag-top">QR READY <span>✳</span></div>
+      <div class="passport-card">
+        <div class="passport-top"><span>PAWS AI</span><span class="passport-chip">GUARDIAN ID</span></div>
+        <div class="animal-illustration"><span class="sun-disc"></span><span class="animal-face">🐕</span><span class="sparkle sparkle-a">✦</span><span class="sparkle sparkle-b">✳</span></div>
+        <div class="passport-info"><div><small>PROFILE TYPE</small><strong>Animal passport</strong></div><div class="qr-mini" aria-label="Decorative QR placeholder"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div></div>
+        <div class="passport-bottom"><span>IDENTITY · CARE · CONNECTION</span><span>PAWS / 01</span></div>
+      </div>
+      <div class="floating-tag tag-bottom"><span class="live-pulse"></span> CARE STARTS HERE</div>
+      <div class="art-caption">A little profile.<br><strong>A bigger chance to be found.</strong></div>
+    </div>
+  </section>
 
-  <div class="hero-card">
-    <div class="paw">🐾</div>
-    <h2>PAW Guardian</h2>
-    <p>
-      Smart Animal Identification &
-      Emergency Response
-    </p>
-  </div>
+  <section class="feature-strip" aria-label="Core features">
+    <div><span class="feature-number">01</span><strong>Guardian Passport</strong><small>One profile for key details</small></div>
+    <div><span class="feature-number">02</span><strong>QR-ready profile</strong><small>Quick access to animal info</small></div>
+    <div><span class="feature-number">03</span><strong>Rescue Beacon</strong><small>A clear path to report SOS</small></div>
+    <div><span class="feature-number">04</span><strong>Care network</strong><small>Owner and clinic touchpoints</small></div>
+  </section>
 
-</section>
+  <section class="register-feature" id="register">
+    <div class="register-symbol"><span>✳</span><small>PAWS<br>GUARDIAN</small></div>
+    <div class="register-text"><p class="section-kicker">START WITH ONE ANIMAL</p><h2>Give their details a <em>safe place.</em></h2><p>Create an animal record with the owner's contact number and essential care information. Keep the generated Animal ID for future lookup.</p><div class="mini-benefits"><span>✓ Unique Animal ID</span><span>✓ Optional animal photo</span><span>✓ QR profile workflow</span></div></div>
+    <div class="register-action"><a class="button button-lime" href="register-animal.html">Register an animal <span>→</span></a><small>Usually just a few minutes</small></div>
+  </section>
 
-<section class="features">
+  <section class="rescue-section">
+    <div class="section-heading"><div><p class="section-kicker">WHEN SOMEONE NEEDS HELP</p><h2>Three clear steps.<br><em>One better chance.</em></h2></div><p>Make the next action obvious for an owner, a finder, or a care provider.</p></div>
+    <div class="rescue-steps">
+      <article class="rescue-step"><span class="step-count">01 / IDENTIFY</span><div class="step-icon icon-mint">⌕</div><h3>Find the profile</h3><p>Open the animal page from its link or QR code and check the available public details.</p><a href="animal.html">Open animal lookup ↗</a></article>
+      <article class="rescue-step step-highlight"><span class="step-count">02 / REPORT</span><div class="step-icon icon-yellow">!</div><h3>Send an SOS report</h3><p>Use the SOS page to submit an incident report. Location and photo depend on permissions and setup.</p><a href="animal.html">Go to SOS page ↗</a></article>
+      <article class="rescue-step"><span class="step-count">03 / CONNECT</span><div class="step-icon icon-lilac">♡</div><h3>Bring care closer</h3><p>Owners can look up records, and clinics can submit a photo for review.</p><div class="step-links"><a href="owner.html">Owner portal ↗</a><a href="vet.html">Clinic submission ↗</a></div></article>
+    </div>
+  </section>
 
-  <div class="feature">
-    <div>🔳</div>
-    <h3>QR Identification</h3>
-    <p>
-      Scan the animal's QR code to quickly
-      access important information.
-    </p>
-  </div>
-
-  <div class="feature">
-    <div>👤</div>
-    <h3>Owner Details</h3>
-    <p>
-      Store owner contact information
-      securely in Firebase.
-    </p>
-  </div>
-
-  <div class="feature">
-    <div>🚨</div>
-    <h3>Emergency SOS</h3>
-    <p>
-      Record emergency alerts when an
-      animal needs immediate help.
-    </p>
-  </div>
-
-</section>
-
-<footer>
-  © 2026 PAW Guardian
-</footer>
-
+  <section class="care-callout"><div class="callout-icon">✳</div><div><p class="section-kicker">A SMALL ACTION CAN MATTER</p><h2>Start a Guardian Passport today.</h2><p>Register an animal, keep its ID, and share the profile link when it may help.</p></div><a class="button button-dark" href="register-animal.html">Get started <span>→</span></a></section>
+  <p class="safety-note"><strong>Important:</strong> PAWS AI is a project prototype, not a 24/7 emergency service or verified rescue network. In an immediate emergency, contact a local animal-welfare organization or appropriate emergency service directly.</p>
+</main>
+<footer class="site-footer"><a class="footer-logo" href="index.html">✳ PAWS AI</a><span>Made with care for animals.</span><span>Guardian Passport · Student prototype</span></footer>
 </body>
 </html>
