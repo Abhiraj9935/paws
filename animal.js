@@ -17,16 +17,16 @@ import {
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-storage.js";
 import { firebaseConfig } from "./firebase-config.js";
 
-// Firebase setup
+// Initialize Firebase
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 const storage = getStorage(app);
 
-// Make.com webhook — prototype testing only
+// Make.com webhook (prototype testing only)
 const MAKE_WEBHOOK_URL = "https://hook.us2.make.com/okkcdtwir6dix2vwoxwkuccdsurswla2";
 
 const $ = id => document.getElementById(id);
-const params = new URLSearchParams(location.search);
+const params = new URLSearchParams(window.location.search);
 const animalId = (params.get("id") || "").trim();
 
 let animal = null;
@@ -42,11 +42,13 @@ const esc = s =>
   }[c]));
 
 function setStatus(id, msg) {
-  $(id).textContent = msg;
+  const element = $(id);
+  if (element) element.textContent = msg;
 }
 
 function displayAnimal(data) {
   animal = data;
+
   $("pageTitle").textContent =
     data.animalName || data.name || "Animal profile";
 
@@ -76,6 +78,7 @@ function displayAnimal(data) {
 async function loadAnimal() {
   if (!animalId) {
     $("pageTitle").textContent = "Find an animal";
+
     $("animalDetails").innerHTML = `
       <p>Enter an animal ID to open its profile.</p>
       <label for="manualId">Animal ID</label>
@@ -84,19 +87,24 @@ async function loadAnimal() {
     `;
 
     $("findButton").onclick = () => {
-      location.href =
-        `animal.html?id=${encodeURIComponent($("manualId").value.trim())}`;
+      const id = $("manualId").value.trim();
+      if (id) {
+        window.location.href =
+          `animal.html?id=${encodeURIComponent(id)}`;
+      }
     };
     return;
   }
 
   try {
-    const snap = await getDoc(doc(db, "animals", animalId));
+    const snapshot = await getDoc(doc(db, "animals", animalId));
 
-    if (!snap.exists()) {
+    if (!snapshot.exists()) {
       $("pageTitle").textContent = "Animal not found";
       $("animalDetails").innerHTML = `
-        <p>No animal document found with ID <b>${esc(animalId)}</b>.</p>
+        <p>No animal document found with ID
+          <b>${esc(animalId)}</b>.
+        </p>
         <p class="muted">
           Check that the QR URL uses the exact Firestore document ID.
         </p>
@@ -104,22 +112,23 @@ async function loadAnimal() {
       return;
     }
 
-    displayAnimal(snap.data());
-  } catch (e) {
+    displayAnimal(snapshot.data());
+  } catch (error) {
+    console.error("Animal loading error:", error);
     $("pageTitle").textContent = "Unable to load animal";
     $("animalDetails").innerHTML = `
       <p>Could not load the profile. Check Firebase setup and Firestore rules.</p>
-      <p class="small muted">${esc(e.message)}</p>
+      <p class="small muted">${esc(error.message)}</p>
     `;
   }
 }
 
-// SOS report and Make.com notification
+// SOS report: save to Firebase, then notify Make.com
 $("sosButton").addEventListener("click", async () => {
   if (!animal) {
     setStatus(
       "sosStatus",
-      "Animal profile is not loaded. Please check the QR code or animal ID."
+      "Animal profile is not loaded. Please check the animal ID."
     );
     return;
   }
@@ -131,7 +140,6 @@ $("sosButton").addEventListener("click", async () => {
     animalId,
     animalName: animal.animalName || animal.name || "Animal",
     species: animal.species || "",
-    ownerUid: animal.ownerUid || "",
     incidentType: $("incidentType").value,
     notes: $("incidentNotes").value.trim(),
     status: "new",
@@ -143,17 +151,20 @@ $("sosButton").addEventListener("click", async () => {
   };
 
   try {
-    // First, save the SOS report to Firebase.
-    const saved = await addDoc(collection(db, "emergencies"), report);
+    // Save the report first.
+    const saved = await addDoc(
+      collection(db, "emergencies"),
+      report
+    );
     emergencyId = saved.id;
 
-    // Then notify Make.com.
+    // Notify Make.com. This may fail if browser CORS blocks the request.
     try {
       if (
         !MAKE_WEBHOOK_URL.startsWith("https://") ||
         MAKE_WEBHOOK_URL.includes("PASTE_YOUR_")
       ) {
-        throw new Error("Configure the Make.com webhook URL first.");
+        throw new Error("Make.com webhook URL has not been configured.");
       }
 
       const response = await fetch(MAKE_WEBHOOK_URL, {
@@ -173,28 +184,28 @@ $("sosButton").addEventListener("click", async () => {
       });
 
       if (!response.ok) {
-        throw new Error(`Webhook returned HTTP ${response.status}`);
+        throw new Error(`HTTP ${response.status}`);
       }
 
       setStatus(
         "sosStatus",
-        `SOS saved and webhook request sent. Reference: ${emergencyId}.`
+        `SOS saved. Webhook request sent. Reference: ${emergencyId}`
       );
     } catch (webhookError) {
-      console.error("Make.com webhook error:", webhookError);
-
+      console.error("Make.com notification error:", webhookError);
       setStatus(
         "sosStatus",
-        `SOS saved in Firebase, but Make.com notification failed. Reference: ${emergencyId}.`
+        `SOS saved in Firebase, but Make.com notification failed. Reference: ${emergencyId}`
       );
     }
 
     $("extraFields").classList.remove("hidden");
-  } catch (e) {
+  } catch (error) {
+    console.error("SOS save error:", error);
     setStatus(
       "sosStatus",
-      "Could not save the report. Check Firebase Firestore rules/connection. " +
-        e.message
+      "Could not save the report. Check Firebase connection and Firestore rules. " +
+        error.message
     );
     $("sosButton").disabled = false;
   }
@@ -215,30 +226,30 @@ $("locationButton").addEventListener("click", () => {
   setStatus("extraStatus", "Requesting location permission…");
 
   navigator.geolocation.getCurrentPosition(
-    async pos => {
+    async position => {
       try {
-        const lat = pos.coords.latitude;
-        const lon = pos.coords.longitude;
+        const latitude = position.coords.latitude;
+        const longitude = position.coords.longitude;
 
         await updateDoc(doc(db, "emergencies", emergencyId), {
-          latitude: lat,
-          longitude: lon,
-          locationAccuracyMeters: pos.coords.accuracy
+          latitude,
+          longitude,
+          locationAccuracyMeters: position.coords.accuracy
         });
 
         setStatus(
           "extraStatus",
-          `Location saved. Map: https://www.openstreetmap.org/?mlat=${lat}&mlon=${lon}#map=16/${lat}/${lon}`
+          `Location saved. Map: https://www.openstreetmap.org/?mlat=${latitude}&mlon=${longitude}#map=16/${latitude}/${longitude}`
         );
-      } catch (e) {
+      } catch (error) {
         setStatus(
           "extraStatus",
-          "Location was found but could not be saved: " + e.message
+          "Location found but could not be saved: " + error.message
         );
       }
     },
-    err => {
-      setStatus("extraStatus", "Location not shared: " + err.message);
+    error => {
+      setStatus("extraStatus", "Location not shared: " + error.message);
     },
     {
       enableHighAccuracy: true,
@@ -271,13 +282,11 @@ $("uploadButton").addEventListener("click", async () => {
   setStatus("extraStatus", "Uploading photo…");
 
   try {
-    const path =
-      `emergency-photos/${emergencyId}/${Date.now()}-` +
-      file.name.replace(/[^a-zA-Z0-9._-]/g, "_");
-
+    const safeName = file.name.replace(/[^a-zA-Z0-9._-]/g, "_");
+    const path = `emergency-photos/${emergencyId}/${Date.now()}-${safeName}`;
     const storageRef = ref(storage, path);
-    await uploadBytes(storageRef, file);
 
+    await uploadBytes(storageRef, file);
     const url = await getDownloadURL(storageRef);
 
     await updateDoc(doc(db, "emergencies", emergencyId), {
@@ -286,16 +295,17 @@ $("uploadButton").addEventListener("click", async () => {
     });
 
     setStatus("extraStatus", "Photo saved to the emergency report.");
-  } catch (e) {
+  } catch (error) {
     setStatus(
       "extraStatus",
       "Photo upload failed. Check Firebase Storage rules and setup. " +
-        e.message
+        error.message
     );
   } finally {
     $("uploadButton").disabled = false;
   }
 });
 
+// Start loading the animal profile
 loadAnimal();
 ```
