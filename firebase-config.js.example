@@ -1,4 +1,6 @@
-// Rename this file to firebase-config.js and paste your own Firebase Web App settings.
+// OPTIONAL TEMPLATE ONLY.
+// Keep your existing firebase-config.js if it already exports firebaseConfig.
+// If you need to create it, copy this file to firebase-config.js and enter your Firebase Web App config.
 export const firebaseConfig = {
   apiKey: "YOUR_API_KEY",
   authDomain: "YOUR_PROJECT_ID.firebaseapp.com",

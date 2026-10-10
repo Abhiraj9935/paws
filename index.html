@@ -1,55 +1,13 @@
 <!doctype html>
-<html lang="en">
-<head>
-<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="theme-color" content="#17553f"><title>PAWS AI | Care starts with a scan</title>
-<link rel="stylesheet" href="style.css">
-</head>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#173e32"><meta name="description" content="PAWS AI animal care and emergency reporting"><title>PAWS AI — Every Paw Matters</title><link rel="stylesheet" href="style.css"></head>
 <body>
-<header class="topbar">
-  <a class="brand" href="index.html"><span class="brand-mark">🐾</span><span>PAWS <b>AI</b><small>SCAN · CARE · RESCUE</small></span></a>
-  <nav class="desktop-nav"><a class="active" href="index.html">Home</a><a href="owner.html">Owner Space</a><a href="auth.html?mode=register">Register</a><a class="nav-login" href="auth.html?mode=login">Login</a><a class="nav-sos" href="animal.html">SOS ♡</a></nav>
-  <button class="mobile-menu" id="menuButton" aria-label="Open menu">☰</button>
-</header>
-<nav class="mobile-nav hidden" id="mobileNav"><a href="index.html">Home</a><a href="owner.html">Owner Space</a><a href="auth.html?mode=register">Register Owner</a><a href="auth.html?mode=login">Owner Login</a><a href="animal.html">Emergency SOS</a></nav>
+<header class="header"><a class="brand" href="index.html"><span class="brand-symbol">✳</span><span>paws<span class="brand-ai">ai</span><small>CARE THAT CONNECTS</small></span></a><button class="menu-toggle" id="menuToggle" aria-label="Toggle menu">☰</button><nav id="mainNav"><a class="active" href="index.html">Home</a><a href="#how">How it works</a><a href="owner.html">Owner space</a><a href="auth.html?mode=login">Sign in</a><a class="btn btn-dark btn-small" href="animal.html">Emergency SOS ↗</a></nav></header>
 <main>
-<section class="hero wrap">
-  <div class="hero-copy"><div class="eyebrow"><span></span> ANIMAL CARE, SIMPLIFIED</div>
-    <h1>Every animal deserves a <em>helping hand.</em></h1>
-    <p class="lead">Find essential animal information, connect with owners, and report an animal that needs help. Every small action can make a difference.</p>
-    <div class="hero-actions"><a class="btn btn-green" href="#find-animal">⌕ &nbsp; Find an Animal</a><a class="btn btn-red" href="animal.html">♧ &nbsp; Emergency SOS</a></div>
-    <div class="secondary-actions"><a class="btn btn-outline" href="auth.html?mode=register">♙ Register as Owner</a><a class="btn btn-quiet" href="auth.html?mode=login">↪ Owner Login</a></div>
-    <div class="trust-line"><span>● ● ●</span> Made for safer, kinder communities</div>
-  </div>
-  <div class="hero-art"><div class="art-blob"></div><div class="paw-stamp">✦</div>
-    <img class="hero-dog" src="https://images.unsplash.com/photo-1552053831-71594a27632d?auto=format&fit=crop&w=850&q=85" alt="Happy golden retriever">
-    <img class="hero-cat" src="https://images.unsplash.com/photo-1573865526739-10659fec78a5?auto=format&fit=crop&w=500&q=85" alt="Cat looking toward camera">
-    <div class="floating-note"><span>♡</span><div><b>Better together</b><small>One scan can help a life</small></div></div><div class="floating-paw">🐾</div>
-  </div>
-</section>
-<section class="wrap quick-strip">
-  <a class="quick-item" href="#find-animal"><span class="quick-icon">▦</span><b>QR Animal Profiles</b><small>Essential details in seconds</small></a>
-  <a class="quick-item" href="animal.html"><span class="quick-icon red-icon">♧</span><b>Emergency Reporting</b><small>Report an animal in need</small></a>
-  <a class="quick-item" href="animal.html"><span class="quick-icon">⌖</span><b>Optional Location</b><small>Help responders find the area</small></a>
-  <a class="quick-item" href="animal.html"><span class="quick-icon">▣</span><b>Photo Uploads</b><small>Add context to a report</small></a>
-</section>
-<section class="wrap two-panels">
-  <div class="panel" id="find-animal"><div class="section-kicker">START HERE</div><h2>Find an animal</h2><p class="muted">Enter the ID printed on an animal's QR tag.</p>
-    <form id="findForm" class="inline-form"><input id="animalId" required placeholder="e.g. DOG-KNP-001" aria-label="Animal ID"><button class="btn btn-green" type="submit">View profile →</button></form>
-    <div class="panel-hint">You can also scan the QR code with your phone camera to open the profile directly.</div>
-  </div>
-  <div class="panel sos-panel"><div class="sos-head"><span class="sos-symbol">!</span><div><div class="section-kicker red-text">URGENT HELP</div><h2>Found an animal in need?</h2></div></div>
-    <p class="muted">Open an animal profile to send an SOS report and optionally add location or a photo.</p><a class="btn btn-red full" href="animal.html">Report an Emergency <span>↗</span></a>
-  </div>
-</section>
-<section class="wrap how-section"><div class="center-heading"><div class="section-kicker">SIMPLE BY DESIGN</div><h2>How PAWS AI works</h2><p class="muted">A few simple steps can make a real difference.</p></div>
-  <div class="steps"><article class="step"><span class="step-num">01</span><span class="step-icon">▦</span><h3>Find an animal</h3><p>Scan a QR code or enter an animal ID.</p></article><article class="step"><span class="step-num">02</span><span class="step-icon">♡</span><h3>View the profile</h3><p>See essential details to help identify the animal.</p></article><article class="step"><span class="step-num">03</span><span class="step-icon step-red">♧</span><h3>Report SOS</h3><p>Send an emergency report if help is needed.</p></article><article class="step"><span class="step-num">04</span><span class="step-icon">▣</span><h3>Add details</h3><p>Optionally share location and upload a photo.</p></article></div>
-</section>
-<section class="wrap mission-banner"><img src="https://images.unsplash.com/photo-1543466835-00a7907e9de1?auto=format&fit=crop&w=500&q=80" alt="Friendly dog"><div class="mission-copy"><div class="section-kicker light-kicker">WHY WE CARE</div><h2>Because every life matters.</h2><p>Join a community working toward a safer world for animals, one scan at a time.</p><a href="owner.html" class="btn btn-light">Learn about PAWS AI →</a></div><div class="mission-points"><div>♡ <span>More rescues</span></div><div>♧ <span>Safer communities</span></div><div>✦ <span>Happier animals</span></div></div></section>
-</main>
-<footer class="footer wrap"><a class="brand" href="index.html"><span class="brand-mark">🐾</span><span>PAWS <b>AI</b></span></a><span>Scan. Care. Rescue. <b>♥</b></span></footer>
-<script>
-document.getElementById("findForm").addEventListener("submit",e=>{e.preventDefault();const id=document.getElementById("animalId").value.trim();if(id)location.href="animal.html?id="+encodeURIComponent(id)});
-document.getElementById("menuButton").addEventListener("click",()=>document.getElementById("mobileNav").classList.toggle("hidden"));
-</script>
-</body></html>
+<section class="hero shell"><div class="hero-copy"><span class="eyebrow"><i></i> A LITTLE CARE GOES A LONG WAY</span><h1>For the love<br>of <em>every paw.</em></h1><p>A kinder, smarter way to connect animals with the people who care. Find a profile, share what you see, and help make every street a safer place.</p><div class="button-row"><a class="btn btn-dark" href="#find">Find an animal <span>↗</span></a><a class="btn btn-outline" href="auth.html?mode=register">Join as an owner <span>＋</span></a></div><div class="trust"><div class="mini-avatars"><b>🐶</b><b>🐱</b><b>🐾</b></div><div><strong>Made for animal people.</strong><small>Built around care, not complexity.</small></div></div></div>
+<div class="hero-art"><div class="hero-main-photo"><img src="https://images.unsplash.com/photo-1552053831-71594a27632d?auto=format&fit=crop&w=1100&q=88" alt="Golden retriever outdoors"></div><div class="hero-cat-photo"><img src="https://images.unsplash.com/photo-1573865526739-10659fec78a5?auto=format&fit=crop&w=500&q=85" alt="Curious cat"></div><div class="float-note"><span>♡</span><div><strong>One scan can help.</strong><small>Good things start with care.</small></div></div><span class="star star-a">✳</span><span class="star star-b">✦</span><div class="photo-label">A SAFER WORLD, ONE PAW AT A TIME</div></div><div class="hero-scroll">↓ &nbsp; GOOD CARE STARTS HERE</div></section>
+<section class="feature-bar shell"><div><span>⌗</span><p><b>QR-ready profiles</b><small>Useful details, quickly</small></p></div><div><span class="rose">♡</span><p><b>Emergency SOS</b><small>Report when help is needed</small></p></div><div><span>⌖</span><p><b>Optional location</b><small>Only when you choose</small></p></div><div><span>▧</span><p><b>Photo uploads</b><small>Add helpful context</small></p></div></section>
+<section class="lookup shell" id="find"><div><span class="eyebrow">START WITH A SCAN</span><h2>Meet an animal.<br><em>Make a difference.</em></h2><p>Have an animal tag or ID? Enter it below to open the profile and find the information you need.</p></div><form id="findForm" class="lookup-card"><label for="animalId">ANIMAL ID</label><div class="lookup-row"><input id="animalId" required placeholder="e.g. DOG-KNP-001"><button class="btn btn-dark" type="submit">Find profile →</button></div><small>ⓘ Use the ID printed on the animal’s QR tag.</small></form></section>
+<section class="how-section" id="how"><div class="shell"><div class="section-head"><div><span class="eyebrow">SIMPLE BY NATURE</span><h2>Small steps.<br><em>Real-world care.</em></h2></div><p>Helpful tools for the moments that matter—from a quick profile check to letting others know an animal needs help.</p></div><div class="cards"><a class="action-card" href="#find"><div class="card-top"><small>01 / FIND</small><span>↗</span></div><div class="card-emoji green-bg">⌗</div><h3>Find their profile</h3><p>Use an animal ID or scan a QR tag to see available details.</p><b class="link-label">Look up an animal →</b></a><a class="action-card" href="animal.html"><div class="card-top"><small>02 / HELP</small><span>↗</span></div><div class="card-emoji rose-bg">♡</div><h3>Send an SOS</h3><p>Share an emergency report when an animal may be in danger.</p><b class="link-label red-text">Report an emergency →</b></a><a class="action-card" href="auth.html?mode=register"><div class="card-top"><small>03 / CONNECT</small><span>↗</span></div><div class="card-emoji sand-bg">✳</div><h3>Join the care circle</h3><p>Create an owner account and keep your account details in one place.</p><b class="link-label">Become a member →</b></a></div></div></section>
+<section class="closing shell"><div class="closing-photo"><img src="https://images.unsplash.com/photo-1543466835-00a7907e9de1?auto=format&fit=crop&w=700&q=85" alt="Friendly dog"></div><div><span class="eyebrow light">KINDNESS IS CONTAGIOUS</span><h2>They make our world better.<br><em>Let’s do the same.</em></h2><p>Every helpful action matters. Join PAWS AI and be part of a community that looks out for animals.</p><a class="btn btn-cream" href="auth.html?mode=register">Join PAWS AI ↗</a></div><span class="closing-star">✳</span></section>
+</main><footer class="footer shell"><a class="brand" href="index.html"><span class="brand-symbol">✳</span><span>paws<span class="brand-ai">ai</span><small>CARE THAT CONNECTS</small></span></a><p>Made with care for every kind of paw. <b>♥</b></p><a href="animal.html">Need help? Open SOS ↗</a></footer>
+<script>const t=document.getElementById('menuToggle'),n=document.getElementById('mainNav');t.addEventListener('click',()=>n.classList.toggle('nav-open'));document.getElementById('findForm').addEventListener('submit',e=>{e.preventDefault();const id=document.getElementById('animalId').value.trim();if(id)location.href='animal.html?id='+encodeURIComponent(id)});</script></body></html>
