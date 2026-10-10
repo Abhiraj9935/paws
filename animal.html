@@ -1,6 +1,443 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#173e32"><title>Animal profile & SOS — PAWS AI</title><link rel="stylesheet" href="style.css"></head><body>
-<header class="header"><a class="brand" href="index.html"><span class="brand-symbol">✳</span><span>paws<span class="brand-ai">ai</span><small>CARE THAT CONNECTS</small></span></a><button class="menu-toggle" id="menuToggle" aria-label="Toggle menu">☰</button><nav id="mainNav"><a href="index.html">Home</a><a href="owner.html">Owner space</a><a class="btn btn-dark btn-small" href="#sos">Emergency SOS ↗</a></nav></header>
-<main class="page-shell"><section class="page-intro"><span class="eyebrow-text">QR ANIMAL PROFILE</span><h1 id="pageTitle">Loading animal…</h1><p>Essential details to help identify this animal and request help when needed.</p></section><div class="grid-two"><section class="panel" id="animalDetails"><p class="muted">Loading animal details…</p></section>
-<section class="panel sos-panel" id="sos"><div class="sos-heading"><span class="sos-icon">!</span><div><span class="eyebrow-text" style="color:#c84d4f">URGENT HELP</span><h2>Emergency SOS</h2></div></div><p class="muted small">Create a report if this animal is injured, lost, or in danger.</p><label for="incidentType">What is happening?</label><select id="incidentType"><option>Injured animal</option><option>Animal in danger</option><option>Lost animal</option><option>Possible illness</option><option>Other concern</option></select><label for="incidentNotes">Details (optional)</label><textarea id="incidentNotes" placeholder="Describe what you noticed…"></textarea><button id="sosButton" class="btn btn-red full" type="button">♡ &nbsp; Send SOS report</button><div id="sosStatus" class="status" role="status" aria-live="polite"></div><div id="extraFields" class="hidden"><hr><h3>Help responders</h3><p class="muted small">Location and photo sharing are optional.</p><button id="locationButton" class="btn btn-outline full" type="button">⌖ Add my current location</button><label for="photoInput">Photo (optional)</label><input id="photoInput" type="file" accept="image/*" capture="environment"><button id="uploadButton" class="btn btn-dark full" type="button">Upload photo to report</button><div id="extraStatus" class="status" role="status" aria-live="polite"></div></div></section></div></main>
-<footer class="footer shell"><a class="brand" href="index.html"><span class="brand-symbol">✳</span><span>paws<span class="brand-ai">ai</span><small>CARE THAT CONNECTS</small></span></a><p>Made with care for every paw. <b style="color:#c84d4f">♥</b></p><a href="index.html">Back home ↗</a></footer>
-<script type="module" src="animal.js"></script><script>const t=document.getElementById('menuToggle'),n=document.getElementById('mainNav');t.addEventListener('click',()=>n.classList.toggle('nav-open'));</script></body></html>
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#f7f8f2">
+  <title>Animal Profile | PAWS AI</title>
+
+  <link rel="stylesheet" href="style.css">
+
+  <style>
+    /* Page-specific layout fixes */
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      width: 100%;
+      overflow-x: hidden;
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      width: 100%;
+      overflow-x: hidden;
+      background: #f7f8f2;
+      color: #20382c;
+      font-family: Arial, Helvetica, sans-serif;
+    }
+
+    img, input, textarea, button {
+      max-width: 100%;
+    }
+
+    .animal-page {
+      width: min(1120px, calc(100% - 40px));
+      margin: 0 auto;
+      padding: 24px 0 60px;
+    }
+
+    .animal-nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 16px;
+      flex-wrap: wrap;
+      margin-bottom: 28px;
+    }
+
+    .brand {
+      color: #205b40;
+      font-size: 25px;
+      font-weight: 800;
+      text-decoration: none;
+      letter-spacing: -1px;
+    }
+
+    .back-link {
+      color: #205b40;
+      text-decoration: none;
+      font-weight: 700;
+      padding: 10px 15px;
+      border: 1px solid #dce5d8;
+      border-radius: 12px;
+      background: white;
+    }
+
+    .profile-card {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+      gap: 32px;
+      align-items: start;
+      padding: 28px;
+      background: #fff;
+      border: 1px solid #e6e9df;
+      border-radius: 24px;
+      box-shadow: 0 12px 35px rgba(32, 56, 44, 0.06);
+    }
+
+    .animal-photo-wrap {
+      width: 100%;
+      min-width: 0;
+      overflow: hidden;
+      border-radius: 18px;
+      background: #edf1e9;
+      aspect-ratio: 4 / 3;
+    }
+
+    .animal-photo {
+      display: block;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center;
+    }
+
+    .eyebrow {
+      margin: 0 0 10px;
+      color: #568064;
+      font-size: 12px;
+      font-weight: 800;
+      letter-spacing: 1.8px;
+      text-transform: uppercase;
+    }
+
+    .animal-name {
+      margin: 0 0 12px;
+      color: #20382c;
+      font-size: clamp(30px, 5vw, 44px);
+      line-height: 1.12;
+      overflow-wrap: anywhere;
+    }
+
+    .animal-description {
+      margin: 0 0 24px;
+      color: #68756b;
+      line-height: 1.7;
+      overflow-wrap: anywhere;
+    }
+
+    .details-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+      margin-bottom: 24px;
+    }
+
+    .detail-item {
+      min-width: 0;
+      padding: 15px;
+      border: 1px solid #e9ede5;
+      border-radius: 14px;
+      background: #fafbf8;
+    }
+
+    .detail-label {
+      display: block;
+      margin-bottom: 7px;
+      color: #788277;
+      font-size: 12px;
+    }
+
+    .detail-value {
+      display: block;
+      color: #20382c;
+      font-weight: 700;
+      overflow-wrap: anywhere;
+    }
+
+    .status-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      margin-bottom: 18px;
+      padding: 8px 12px;
+      border-radius: 30px;
+      background: #eaf5e9;
+      color: #286440;
+      font-size: 13px;
+      font-weight: 700;
+    }
+
+    .section-card {
+      margin-top: 24px;
+      padding: 28px;
+      border: 1px solid #e6e9df;
+      border-radius: 24px;
+      background: #fff;
+      box-shadow: 0 12px 35px rgba(32, 56, 44, 0.04);
+    }
+
+    .section-title {
+      margin: 0 0 8px;
+      font-size: 25px;
+      line-height: 1.25;
+    }
+
+    .section-description {
+      margin: 0 0 24px;
+      color: #68756b;
+      line-height: 1.6;
+    }
+
+    .form-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 18px;
+    }
+
+    .form-field {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      min-width: 0;
+    }
+
+    .form-field.full-width {
+      grid-column: 1 / -1;
+    }
+
+    .form-field label {
+      font-size: 14px;
+      font-weight: 700;
+      color: #34483a;
+    }
+
+    .form-field input,
+    .form-field textarea {
+      display: block;
+      width: 100%;
+      min-width: 0;
+      padding: 13px 14px;
+      border: 1px solid #dfe5da;
+      border-radius: 12px;
+      background: #fff;
+      color: #20382c;
+      font: inherit;
+      outline: none;
+    }
+
+    .form-field input:focus,
+    .form-field textarea:focus {
+      border-color: #528462;
+      box-shadow: 0 0 0 3px rgba(82, 132, 98, 0.12);
+    }
+
+    .form-field textarea {
+      min-height: 120px;
+      resize: vertical;
+    }
+
+    .primary-button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+      min-height: 48px;
+      padding: 13px 18px;
+      border: 0;
+      border-radius: 12px;
+      background: #286440;
+      color: white;
+      font: inherit;
+      font-weight: 700;
+      cursor: pointer;
+      transition: background 0.2s ease;
+    }
+
+    .primary-button:hover {
+      background: #1d4e31;
+    }
+
+    .primary-button:disabled {
+      cursor: wait;
+      opacity: 0.65;
+    }
+
+    .notice {
+      margin-top: 16px;
+      padding: 13px 15px;
+      border-radius: 12px;
+      background: #f2f5ef;
+      color: #425647;
+      line-height: 1.5;
+      overflow-wrap: anywhere;
+    }
+
+    .notice:empty {
+      display: none;
+    }
+
+    .page-footer {
+      padding-top: 28px;
+      color: #788277;
+      text-align: center;
+      font-size: 13px;
+    }
+
+    @media (max-width: 760px) {
+      .animal-page {
+        width: min(100% - 24px, 560px);
+        padding-top: 14px;
+      }
+
+      .profile-card {
+        grid-template-columns: minmax(0, 1fr);
+        gap: 22px;
+        padding: 16px;
+        border-radius: 18px;
+      }
+
+      .animal-photo-wrap {
+        aspect-ratio: 5 / 4;
+      }
+
+      .section-card {
+        padding: 20px 16px;
+        border-radius: 18px;
+      }
+
+      .form-grid {
+        grid-template-columns: minmax(0, 1fr);
+      }
+
+      .form-field.full-width {
+        grid-column: auto;
+      }
+    }
+
+    @media (max-width: 380px) {
+      .animal-page {
+        width: calc(100% - 20px);
+      }
+
+      .details-grid {
+        grid-template-columns: minmax(0, 1fr);
+      }
+
+      .brand {
+        font-size: 22px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <main class="animal-page">
+    <nav class="animal-nav" aria-label="Main navigation">
+      <a class="brand" href="index.html">PAWS AI</a>
+      <a class="back-link" href="index.html">← Back to home</a>
+    </nav>
+
+    <section class="profile-card" aria-labelledby="animalName">
+      <div class="animal-photo-wrap">
+        <img
+          id="animalPhoto"
+          class="animal-photo"
+          src="https://images.unsplash.com/photo-1552053831-71594a27632d?auto=format&fit=crop&w=1000&q=85"
+          alt="Animal profile"
+        >
+      </div>
+
+      <div>
+        <p class="eyebrow">Animal profile</p>
+        <span id="animalStatus" class="status-pill">● Profile</span>
+        <h1 id="animalName" class="animal-name">Loading animal…</h1>
+        <p id="animalDescription" class="animal-description">
+          Please wait while we load this animal's information.
+        </p>
+
+        <div class="details-grid">
+          <div class="detail-item">
+            <span class="detail-label">Animal type</span>
+            <span class="detail-value" id="animalType">—</span>
+          </div>
+          <div class="detail-item">
+            <span class="detail-label">Age</span>
+            <span class="detail-value" id="animalAge">—</span>
+          </div>
+          <div class="detail-item">
+            <span class="detail-label">Location</span>
+            <span class="detail-value" id="animalLocation">—</span>
+          </div>
+          <div class="detail-item">
+            <span class="detail-label">Health status</span>
+            <span class="detail-value" id="animalHealth">—</span>
+          </div>
+        </div>
+
+        <div id="profileMessage" class="notice" role="status" aria-live="polite"></div>
+      </div>
+    </section>
+
+    <section class="section-card" aria-labelledby="reportTitle">
+      <h2 id="reportTitle" class="section-title">Report an animal emergency</h2>
+      <p class="section-description">
+        Use this form to report an injured, missing, or endangered animal.
+        Provide a location and as much useful information as possible.
+      </p>
+
+      <form id="emergencyForm">
+        <div class="form-grid">
+          <div class="form-field">
+            <label for="reporterName">Your name</label>
+            <input id="reporterName" name="reporterName"
+                   type="text" placeholder="Enter your name" required>
+          </div>
+
+          <div class="form-field">
+            <label for="reporterPhone">Contact number</label>
+            <input id="reporterPhone" name="reporterPhone"
+                   type="tel" placeholder="Enter contact number">
+          </div>
+
+          <div class="form-field">
+            <label for="emergencyType">Emergency type</label>
+            <input id="emergencyType" name="emergencyType"
+                   type="text" placeholder="e.g. Injured animal" required>
+          </div>
+
+          <div class="form-field">
+            <label for="emergencyLocation">Location</label>
+            <input id="emergencyLocation" name="emergencyLocation"
+                   type="text" placeholder="Street, area, or landmark" required>
+          </div>
+
+          <div class="form-field full-width">
+            <label for="emergencyDescription">What happened?</label>
+            <textarea id="emergencyDescription" name="emergencyDescription"
+              placeholder="Describe the situation and any visible dangers…"
+              required></textarea>
+          </div>
+
+          <div class="form-field full-width">
+            <label for="emergencyPhoto">Add a photo (optional)</label>
+            <input id="emergencyPhoto" name="emergencyPhoto"
+                   type="file" accept="image/*">
+          </div>
+
+          <div class="form-field full-width">
+            <button id="submitEmergency" class="primary-button" type="submit">
+              Submit emergency report
+            </button>
+          </div>
+        </div>
+      </form>
+
+      <div id="emergencyMessage" class="notice"
+           role="status" aria-live="polite"></div>
+    </section>
+
+    <footer class="page-footer">
+      PAWS AI · Helping animals find safety and care
+    </footer>
+  </main>
+
+  <script type="module" src="animal.js"></script>
+</body>
+</html>
+```
