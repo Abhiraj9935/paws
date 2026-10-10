@@ -1,311 +1,73 @@
-```javascript
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-import {
-  getFirestore,
-  doc,
-  getDoc,
-  collection,
-  addDoc,
-  updateDoc,
-  serverTimestamp
-} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
-import {
-  getStorage,
-  ref,
-  uploadBytes,
-  getDownloadURL
-} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-storage.js";
+import { getFirestore, doc, getDoc, collection, addDoc, updateDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-storage.js";
 import { firebaseConfig } from "./firebase-config.js";
 
-// Initialize Firebase
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 const storage = getStorage(app);
-
-// Make.com webhook (prototype testing only)
-const MAKE_WEBHOOK_URL = "https://hook.us2.make.com/okkcdtwir6dix2vwoxwkuccdsurswla2";
-
+// Optional: paste the complete HTTPS Make.com webhook URL here.
+// Public webpages expose this URL; use a server-side proxy for production.
+const MAKE_WEBHOOK_URL = "PASTE_YOUR_FULL_MAKE_WEBHOOK_URL_HERE";
 const $ = id => document.getElementById(id);
-const params = new URLSearchParams(window.location.search);
-const animalId = (params.get("id") || "").trim();
+const animalId = (new URLSearchParams(location.search).get("id") || "").trim();
+let animal = null, emergencyId = null;
 
-let animal = null;
-let emergencyId = null;
-
-const esc = s =>
-  String(s ?? "").replace(/[&<>"']/g, c => ({
-    "&": "&amp;",
-    "<": "&lt;",
-    ">": "&gt;",
-    '"': "&quot;",
-    "'": "&#39;"
-  }[c]));
-
-function setStatus(id, msg) {
-  const element = $(id);
-  if (element) element.textContent = msg;
+function status(id, message) { const el = $(id); if (el) el.textContent = message; }
+function addText(parent, tag, value, className = "") {
+  const el = document.createElement(tag); el.textContent = String(value ?? "");
+  if (className) el.className = className; parent.appendChild(el); return el;
 }
-
 function displayAnimal(data) {
-  animal = data;
-
-  $("pageTitle").textContent =
-    data.animalName || data.name || "Animal profile";
-
-  const image = data.photoUrl
-    ? `<img class="animal-photo" src="${esc(data.photoUrl)}" alt="Photo of animal">`
-    : "";
-
-  $("animalDetails").innerHTML = `
-    ${image}
-    <h2>${esc(data.animalName || data.name || "Animal")}</h2>
-    <p>
-      <span class="pill">${esc(data.species || "Animal")}</span>
-      <span class="pill">${esc(data.breed || "Breed not listed")}</span>
-    </p>
-    <p><b>Animal ID:</b> ${esc(data.animalId || animalId)}</p>
-    <p><b>Age:</b> ${esc(data.age || "Not listed")}</p>
-    <p><b>Sex:</b> ${esc(data.gender || "Not listed")}</p>
-    <p><b>Medical notes:</b> ${esc(data.medical || "Not listed")}</p>
-    <p><b>Vaccination:</b> ${esc(data.vaccination || "Not listed")}</p>
-    <p><b>Area:</b> ${esc(data.address || "Not listed")}</p>
-    <p class="small muted">
-      Owner contact details are intentionally not displayed publicly.
-    </p>
-  `;
+  animal = data; $("pageTitle").textContent = data.animalName || data.name || "Animal profile";
+  const root = $("animalDetails"); root.replaceChildren();
+  if (data.photoUrl) { const img = document.createElement("img"); img.className = "animal-photo"; img.src = data.photoUrl; img.alt = "Animal photo"; root.appendChild(img); }
+  addText(root, "h2", data.animalName || data.name || "Animal");
+  const pills = document.createElement("p"); addText(pills, "span", data.species || "Animal", "pill"); addText(pills, "span", data.breed || "Breed not listed", "pill"); root.appendChild(pills);
+  for (const [label, value] of [["Animal ID", data.animalId || animalId], ["Age", data.age || "Not listed"], ["Gender", data.gender || "Not listed"], ["Medical notes", data.medical || "Not listed"], ["Vaccination", data.vaccination || "Not listed"], ["Area", data.address || "Not listed"]]) {
+    const p = document.createElement("p"), strong = document.createElement("strong"); strong.textContent = label + ": "; p.appendChild(strong); p.appendChild(document.createTextNode(String(value))); root.appendChild(p);
+  }
+  addText(root, "p", "Private owner contact details are not shown publicly.", "small muted");
 }
-
 async function loadAnimal() {
-  if (!animalId) {
-    $("pageTitle").textContent = "Find an animal";
-
-    $("animalDetails").innerHTML = `
-      <p>Enter an animal ID to open its profile.</p>
-      <label for="manualId">Animal ID</label>
-      <input id="manualId" placeholder="DOG-KNP-001">
-      <button id="findButton" class="full">Find animal</button>
-    `;
-
-    $("findButton").onclick = () => {
-      const id = $("manualId").value.trim();
-      if (id) {
-        window.location.href =
-          `animal.html?id=${encodeURIComponent(id)}`;
-      }
-    };
-    return;
-  }
-
+  if (!animalId) { $("pageTitle").textContent = "Find an animal"; const root = $("animalDetails"); root.replaceChildren(); addText(root, "h2", "Enter an animal ID"); addText(root, "p", "Return to the homepage to find an animal profile.", "muted"); const a = document.createElement("a"); a.className = "btn btn-green"; a.href = "index.html#find-animal"; a.textContent = "Find an animal"; root.appendChild(a); return; }
   try {
-    const snapshot = await getDoc(doc(db, "animals", animalId));
-
-    if (!snapshot.exists()) {
-      $("pageTitle").textContent = "Animal not found";
-      $("animalDetails").innerHTML = `
-        <p>No animal document found with ID
-          <b>${esc(animalId)}</b>.
-        </p>
-        <p class="muted">
-          Check that the QR URL uses the exact Firestore document ID.
-        </p>
-      `;
-      return;
-    }
-
-    displayAnimal(snapshot.data());
-  } catch (error) {
-    console.error("Animal loading error:", error);
-    $("pageTitle").textContent = "Unable to load animal";
-    $("animalDetails").innerHTML = `
-      <p>Could not load the profile. Check Firebase setup and Firestore rules.</p>
-      <p class="small muted">${esc(error.message)}</p>
-    `;
-  }
+    const snap = await getDoc(doc(db, "animals", animalId));
+    if (!snap.exists()) { $("pageTitle").textContent = "Animal not found"; $("animalDetails").replaceChildren(); addText($("animalDetails"), "h2", "We couldn't find this animal"); addText($("animalDetails"), "p", "Check that the ID exactly matches the Firestore document ID.", "muted"); return; }
+    displayAnimal(snap.data());
+  } catch (error) { console.error("Animal loading error:", error); $("pageTitle").textContent = "Unable to load animal"; $("animalDetails").replaceChildren(); addText($("animalDetails"), "p", "Could not load profile. Check Firebase configuration, connection, and Firestore rules."); addText($("animalDetails"), "p", error.message, "small muted"); }
 }
-
-// SOS report: save to Firebase, then notify Make.com
 $("sosButton").addEventListener("click", async () => {
-  if (!animal) {
-    setStatus(
-      "sosStatus",
-      "Animal profile is not loaded. Please check the animal ID."
-    );
-    return;
-  }
-
-  $("sosButton").disabled = true;
-  setStatus("sosStatus", "Saving SOS report…");
-
-  const report = {
-    animalId,
-    animalName: animal.animalName || animal.name || "Animal",
-    species: animal.species || "",
-    incidentType: $("incidentType").value,
-    notes: $("incidentNotes").value.trim(),
-    status: "new",
-    createdAt: serverTimestamp(),
-    source: "public-qr",
-    latitude: null,
-    longitude: null,
-    photoUrl: ""
-  };
-
+  if (!animal) { status("sosStatus", "Load a valid animal profile before sending SOS."); return; }
+  const button = $("sosButton"); button.disabled = true; status("sosStatus", "Saving SOS report…");
+  const report = { animalId, animalName: animal.animalName || animal.name || "Animal", species: animal.species || "", incidentType: $("incidentType").value, notes: $("incidentNotes").value.trim(), status: "new", createdAt: serverTimestamp(), source: "public-qr", latitude: null, longitude: null, photoUrl: "" };
   try {
-    // Save the report first.
-    const saved = await addDoc(
-      collection(db, "emergencies"),
-      report
-    );
-    emergencyId = saved.id;
-
-    // Notify Make.com. This may fail if browser CORS blocks the request.
+    const saved = await addDoc(collection(db, "emergencies"), report); emergencyId = saved.id; $("extraFields").classList.remove("hidden");
+    status("sosStatus", "SOS saved. Reference: " + emergencyId);
+    if (!MAKE_WEBHOOK_URL.startsWith("https://") || MAKE_WEBHOOK_URL.includes("PASTE_YOUR_")) { status("sosStatus", "SOS saved to Firebase. Configure Make.com URL to enable notifications. Reference: " + emergencyId); return; }
     try {
-      if (
-        !MAKE_WEBHOOK_URL.startsWith("https://") ||
-        MAKE_WEBHOOK_URL.includes("PASTE_YOUR_")
-      ) {
-        throw new Error("Make.com webhook URL has not been configured.");
-      }
-
-      const response = await fetch(MAKE_WEBHOOK_URL, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify({
-          animalId,
-          reference: emergencyId,
-          type: report.incidentType,
-          reportUrl:
-            window.location.origin +
-            window.location.pathname +
-            "?id=" + encodeURIComponent(animalId)
-        })
-      });
-
-      if (!response.ok) {
-        throw new Error(`HTTP ${response.status}`);
-      }
-
-      setStatus(
-        "sosStatus",
-        `SOS saved. Webhook request sent. Reference: ${emergencyId}`
-      );
-    } catch (webhookError) {
-      console.error("Make.com notification error:", webhookError);
-      setStatus(
-        "sosStatus",
-        `SOS saved in Firebase, but Make.com notification failed. Reference: ${emergencyId}`
-      );
-    }
-
-    $("extraFields").classList.remove("hidden");
-  } catch (error) {
-    console.error("SOS save error:", error);
-    setStatus(
-      "sosStatus",
-      "Could not save the report. Check Firebase connection and Firestore rules. " +
-        error.message
-    );
-    $("sosButton").disabled = false;
-  }
+      const response = await fetch(MAKE_WEBHOOK_URL, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ animalId, reference: emergencyId, type: report.incidentType, reportUrl: location.origin + location.pathname + "?id=" + encodeURIComponent(animalId) }) });
+      if (!response.ok) throw new Error("HTTP " + response.status);
+      status("sosStatus", "SOS saved and notification request sent. Reference: " + emergencyId);
+    } catch (error) { console.error("Make.com notification error:", error); status("sosStatus", "SOS saved, but notification could not be confirmed. Reference: " + emergencyId); }
+  } catch (error) { console.error("SOS save error:", error); status("sosStatus", "Could not save SOS: " + error.message); button.disabled = false; }
 });
-
-// Optional location sharing
 $("locationButton").addEventListener("click", () => {
-  if (!emergencyId) {
-    setStatus("extraStatus", "Send the SOS report first.");
-    return;
-  }
-
-  if (!navigator.geolocation) {
-    setStatus("extraStatus", "This browser does not support location.");
-    return;
-  }
-
-  setStatus("extraStatus", "Requesting location permission…");
-
-  navigator.geolocation.getCurrentPosition(
-    async position => {
-      try {
-        const latitude = position.coords.latitude;
-        const longitude = position.coords.longitude;
-
-        await updateDoc(doc(db, "emergencies", emergencyId), {
-          latitude,
-          longitude,
-          locationAccuracyMeters: position.coords.accuracy
-        });
-
-        setStatus(
-          "extraStatus",
-          `Location saved. Map: https://www.openstreetmap.org/?mlat=${latitude}&mlon=${longitude}#map=16/${latitude}/${longitude}`
-        );
-      } catch (error) {
-        setStatus(
-          "extraStatus",
-          "Location found but could not be saved: " + error.message
-        );
-      }
-    },
-    error => {
-      setStatus("extraStatus", "Location not shared: " + error.message);
-    },
-    {
-      enableHighAccuracy: true,
-      timeout: 12000,
-      maximumAge: 0
-    }
-  );
+  if (!emergencyId) { status("extraStatus", "Send the SOS report first."); return; }
+  if (!navigator.geolocation) { status("extraStatus", "Location is not supported by this browser."); return; }
+  status("extraStatus", "Waiting for location permission…");
+  navigator.geolocation.getCurrentPosition(async pos => {
+    try { const latitude = pos.coords.latitude, longitude = pos.coords.longitude; await updateDoc(doc(db, "emergencies", emergencyId), { latitude, longitude, locationAccuracyMeters: pos.coords.accuracy }); status("extraStatus", "Location saved. Map: https://www.openstreetmap.org/?mlat=" + latitude + "&mlon=" + longitude); }
+    catch (error) { status("extraStatus", "Could not save location: " + error.message); }
+  }, error => status("extraStatus", "Location not shared: " + error.message), { enableHighAccuracy: true, timeout: 12000, maximumAge: 0 });
 });
-
-// Optional photo upload
 $("uploadButton").addEventListener("click", async () => {
-  if (!emergencyId) {
-    setStatus("extraStatus", "Send the SOS report first.");
-    return;
-  }
-
-  const file = $("photoInput").files?.[0];
-
-  if (!file) {
-    setStatus("extraStatus", "Choose a photo first.");
-    return;
-  }
-
-  if (!file.type.startsWith("image/") || file.size > 8 * 1024 * 1024) {
-    setStatus("extraStatus", "Choose an image smaller than 8 MB.");
-    return;
-  }
-
-  $("uploadButton").disabled = true;
-  setStatus("extraStatus", "Uploading photo…");
-
-  try {
-    const safeName = file.name.replace(/[^a-zA-Z0-9._-]/g, "_");
-    const path = `emergency-photos/${emergencyId}/${Date.now()}-${safeName}`;
-    const storageRef = ref(storage, path);
-
-    await uploadBytes(storageRef, file);
-    const url = await getDownloadURL(storageRef);
-
-    await updateDoc(doc(db, "emergencies", emergencyId), {
-      photoUrl: url,
-      photoStoragePath: path
-    });
-
-    setStatus("extraStatus", "Photo saved to the emergency report.");
-  } catch (error) {
-    setStatus(
-      "extraStatus",
-      "Photo upload failed. Check Firebase Storage rules and setup. " +
-        error.message
-    );
-  } finally {
-    $("uploadButton").disabled = false;
-  }
+  if (!emergencyId) { status("extraStatus", "Send the SOS report first."); return; }
+  const file = $("photoInput").files?.[0]; if (!file) { status("extraStatus", "Choose a photo first."); return; }
+  if (!file.type.startsWith("image/") || file.size > 8 * 1024 * 1024) { status("extraStatus", "Choose an image smaller than 8 MB."); return; }
+  const button = $("uploadButton"); button.disabled = true; status("extraStatus", "Uploading photo…");
+  try { const safeName = file.name.replace(/[^a-zA-Z0-9._-]/g, "_"), path = "emergency-photos/" + emergencyId + "/" + Date.now() + "-" + safeName, storageRef = ref(storage, path); await uploadBytes(storageRef, file); const photoUrl = await getDownloadURL(storageRef); await updateDoc(doc(db, "emergencies", emergencyId), { photoUrl, photoStoragePath: path }); status("extraStatus", "Photo saved to emergency report."); }
+  catch (error) { console.error(error); status("extraStatus", "Photo upload failed: " + error.message); }
+  finally { button.disabled = false; }
 });
-
-// Start loading the animal profile
 loadAnimal();
-```

@@ -1,74 +1,55 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1">
-  <meta name="theme-color" content="#102d25">
-  <meta name="description" content="PAWS AI Guardian Passport: animal identification, QR profiles, SOS reports and rescue coordination.">
-  <title>PAWS AI — Guardian Passport</title>
-  <link rel="stylesheet" href="style.css">
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#17553f"><title>PAWS AI | Care starts with a scan</title>
+<link rel="stylesheet" href="style.css">
 </head>
-<body class="home-page">
-<header class="site-header">
-  <a class="brand" href="index.html"><span class="brand-mark">✳</span><span>PAWS<span class="brand-ai">AI</span><small>GUARDIAN PASSPORT</small></span></a>
-  <nav aria-label="Main navigation">
-    <a class="nav-current" href="index.html">Home</a>
-    <a href="register-animal.html">Register animal</a>
-    <a href="owner.html">Owner portal</a>
-    <a href="vet.html">Clinic photo</a>
-    <a href="animal.html">Scan / SOS</a>
-  </nav>
-  <a class="header-cta" href="register-animal.html">Create a passport <span>↗</span></a>
+<body>
+<header class="topbar">
+  <a class="brand" href="index.html"><span class="brand-mark">🐾</span><span>PAWS <b>AI</b><small>SCAN · CARE · RESCUE</small></span></a>
+  <nav class="desktop-nav"><a class="active" href="index.html">Home</a><a href="owner.html">Owner Space</a><a href="auth.html?mode=register">Register</a><a class="nav-login" href="auth.html?mode=login">Login</a><a class="nav-sos" href="animal.html">SOS ♡</a></nav>
+  <button class="mobile-menu" id="menuButton" aria-label="Open menu">☰</button>
 </header>
+<nav class="mobile-nav hidden" id="mobileNav"><a href="index.html">Home</a><a href="owner.html">Owner Space</a><a href="auth.html?mode=register">Register Owner</a><a href="auth.html?mode=login">Owner Login</a><a href="animal.html">Emergency SOS</a></nav>
 <main>
-  <section class="home-hero">
-    <div class="hero-copy">
-      <div class="status-label"><span class="status-dot"></span> A smarter safety net for animals</div>
-      <p class="hero-kicker">IDENTIFY. PROTECT. RECONNECT.</p>
-      <h1>Every animal deserves a <em>way home.</em></h1>
-      <p class="hero-description">One simple digital passport can help people identify an animal, find its public profile, and share an SOS report when help is needed.</p>
-      <div class="hero-actions"><a class="button button-dark" href="register-animal.html">＋ Register an animal <span>→</span></a><a class="text-link" href="animal.html">I found an animal <span>↗</span></a></div>
-      <div class="hero-note"><span class="note-icon">✓</span><span><strong>Built around the animal</strong><br>Useful details first. Rescue actions easy to find.</span></div>
-    </div>
-    <div class="passport-art" aria-label="Illustration of an animal safety passport">
-      <div class="art-orbit orbit-one"></div><div class="art-orbit orbit-two"></div>
-      <div class="floating-tag tag-top">QR READY <span>✳</span></div>
-      <div class="passport-card">
-        <div class="passport-top"><span>PAWS AI</span><span class="passport-chip">GUARDIAN ID</span></div>
-        <div class="animal-illustration"><span class="sun-disc"></span><span class="animal-face">🐕</span><span class="sparkle sparkle-a">✦</span><span class="sparkle sparkle-b">✳</span></div>
-        <div class="passport-info"><div><small>PROFILE TYPE</small><strong>Animal passport</strong></div><div class="qr-mini" aria-label="Decorative QR placeholder"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div></div>
-        <div class="passport-bottom"><span>IDENTITY · CARE · CONNECTION</span><span>PAWS / 01</span></div>
-      </div>
-      <div class="floating-tag tag-bottom"><span class="live-pulse"></span> CARE STARTS HERE</div>
-      <div class="art-caption">A little profile.<br><strong>A bigger chance to be found.</strong></div>
-    </div>
-  </section>
-
-  <section class="feature-strip" aria-label="Core features">
-    <div><span class="feature-number">01</span><strong>Guardian Passport</strong><small>One profile for key details</small></div>
-    <div><span class="feature-number">02</span><strong>QR-ready profile</strong><small>Quick access to animal info</small></div>
-    <div><span class="feature-number">03</span><strong>Rescue Beacon</strong><small>A clear path to report SOS</small></div>
-    <div><span class="feature-number">04</span><strong>Care network</strong><small>Owner and clinic touchpoints</small></div>
-  </section>
-
-  <section class="register-feature" id="register">
-    <div class="register-symbol"><span>✳</span><small>PAWS<br>GUARDIAN</small></div>
-    <div class="register-text"><p class="section-kicker">START WITH ONE ANIMAL</p><h2>Give their details a <em>safe place.</em></h2><p>Create an animal record with the owner's contact number and essential care information. Keep the generated Animal ID for future lookup.</p><div class="mini-benefits"><span>✓ Unique Animal ID</span><span>✓ Optional animal photo</span><span>✓ QR profile workflow</span></div></div>
-    <div class="register-action"><a class="button button-lime" href="register-animal.html">Register an animal <span>→</span></a><small>Usually just a few minutes</small></div>
-  </section>
-
-  <section class="rescue-section">
-    <div class="section-heading"><div><p class="section-kicker">WHEN SOMEONE NEEDS HELP</p><h2>Three clear steps.<br><em>One better chance.</em></h2></div><p>Make the next action obvious for an owner, a finder, or a care provider.</p></div>
-    <div class="rescue-steps">
-      <article class="rescue-step"><span class="step-count">01 / IDENTIFY</span><div class="step-icon icon-mint">⌕</div><h3>Find the profile</h3><p>Open the animal page from its link or QR code and check the available public details.</p><a href="animal.html">Open animal lookup ↗</a></article>
-      <article class="rescue-step step-highlight"><span class="step-count">02 / REPORT</span><div class="step-icon icon-yellow">!</div><h3>Send an SOS report</h3><p>Use the SOS page to submit an incident report. Location and photo depend on permissions and setup.</p><a href="animal.html">Go to SOS page ↗</a></article>
-      <article class="rescue-step"><span class="step-count">03 / CONNECT</span><div class="step-icon icon-lilac">♡</div><h3>Bring care closer</h3><p>Owners can look up records, and clinics can submit a photo for review.</p><div class="step-links"><a href="owner.html">Owner portal ↗</a><a href="vet.html">Clinic submission ↗</a></div></article>
-    </div>
-  </section>
-
-  <section class="care-callout"><div class="callout-icon">✳</div><div><p class="section-kicker">A SMALL ACTION CAN MATTER</p><h2>Start a Guardian Passport today.</h2><p>Register an animal, keep its ID, and share the profile link when it may help.</p></div><a class="button button-dark" href="register-animal.html">Get started <span>→</span></a></section>
-  <p class="safety-note"><strong>Important:</strong> PAWS AI is a project prototype, not a 24/7 emergency service or verified rescue network. In an immediate emergency, contact a local animal-welfare organization or appropriate emergency service directly.</p>
+<section class="hero wrap">
+  <div class="hero-copy"><div class="eyebrow"><span></span> ANIMAL CARE, SIMPLIFIED</div>
+    <h1>Every animal deserves a <em>helping hand.</em></h1>
+    <p class="lead">Find essential animal information, connect with owners, and report an animal that needs help. Every small action can make a difference.</p>
+    <div class="hero-actions"><a class="btn btn-green" href="#find-animal">⌕ &nbsp; Find an Animal</a><a class="btn btn-red" href="animal.html">♧ &nbsp; Emergency SOS</a></div>
+    <div class="secondary-actions"><a class="btn btn-outline" href="auth.html?mode=register">♙ Register as Owner</a><a class="btn btn-quiet" href="auth.html?mode=login">↪ Owner Login</a></div>
+    <div class="trust-line"><span>● ● ●</span> Made for safer, kinder communities</div>
+  </div>
+  <div class="hero-art"><div class="art-blob"></div><div class="paw-stamp">✦</div>
+    <img class="hero-dog" src="https://images.unsplash.com/photo-1552053831-71594a27632d?auto=format&fit=crop&w=850&q=85" alt="Happy golden retriever">
+    <img class="hero-cat" src="https://images.unsplash.com/photo-1573865526739-10659fec78a5?auto=format&fit=crop&w=500&q=85" alt="Cat looking toward camera">
+    <div class="floating-note"><span>♡</span><div><b>Better together</b><small>One scan can help a life</small></div></div><div class="floating-paw">🐾</div>
+  </div>
+</section>
+<section class="wrap quick-strip">
+  <a class="quick-item" href="#find-animal"><span class="quick-icon">▦</span><b>QR Animal Profiles</b><small>Essential details in seconds</small></a>
+  <a class="quick-item" href="animal.html"><span class="quick-icon red-icon">♧</span><b>Emergency Reporting</b><small>Report an animal in need</small></a>
+  <a class="quick-item" href="animal.html"><span class="quick-icon">⌖</span><b>Optional Location</b><small>Help responders find the area</small></a>
+  <a class="quick-item" href="animal.html"><span class="quick-icon">▣</span><b>Photo Uploads</b><small>Add context to a report</small></a>
+</section>
+<section class="wrap two-panels">
+  <div class="panel" id="find-animal"><div class="section-kicker">START HERE</div><h2>Find an animal</h2><p class="muted">Enter the ID printed on an animal's QR tag.</p>
+    <form id="findForm" class="inline-form"><input id="animalId" required placeholder="e.g. DOG-KNP-001" aria-label="Animal ID"><button class="btn btn-green" type="submit">View profile →</button></form>
+    <div class="panel-hint">You can also scan the QR code with your phone camera to open the profile directly.</div>
+  </div>
+  <div class="panel sos-panel"><div class="sos-head"><span class="sos-symbol">!</span><div><div class="section-kicker red-text">URGENT HELP</div><h2>Found an animal in need?</h2></div></div>
+    <p class="muted">Open an animal profile to send an SOS report and optionally add location or a photo.</p><a class="btn btn-red full" href="animal.html">Report an Emergency <span>↗</span></a>
+  </div>
+</section>
+<section class="wrap how-section"><div class="center-heading"><div class="section-kicker">SIMPLE BY DESIGN</div><h2>How PAWS AI works</h2><p class="muted">A few simple steps can make a real difference.</p></div>
+  <div class="steps"><article class="step"><span class="step-num">01</span><span class="step-icon">▦</span><h3>Find an animal</h3><p>Scan a QR code or enter an animal ID.</p></article><article class="step"><span class="step-num">02</span><span class="step-icon">♡</span><h3>View the profile</h3><p>See essential details to help identify the animal.</p></article><article class="step"><span class="step-num">03</span><span class="step-icon step-red">♧</span><h3>Report SOS</h3><p>Send an emergency report if help is needed.</p></article><article class="step"><span class="step-num">04</span><span class="step-icon">▣</span><h3>Add details</h3><p>Optionally share location and upload a photo.</p></article></div>
+</section>
+<section class="wrap mission-banner"><img src="https://images.unsplash.com/photo-1543466835-00a7907e9de1?auto=format&fit=crop&w=500&q=80" alt="Friendly dog"><div class="mission-copy"><div class="section-kicker light-kicker">WHY WE CARE</div><h2>Because every life matters.</h2><p>Join a community working toward a safer world for animals, one scan at a time.</p><a href="owner.html" class="btn btn-light">Learn about PAWS AI →</a></div><div class="mission-points"><div>♡ <span>More rescues</span></div><div>♧ <span>Safer communities</span></div><div>✦ <span>Happier animals</span></div></div></section>
 </main>
-<footer class="site-footer"><a class="footer-logo" href="index.html">✳ PAWS AI</a><span>Made with care for animals.</span><span>Guardian Passport · Student prototype</span></footer>
-</body>
-</html>
+<footer class="footer wrap"><a class="brand" href="index.html"><span class="brand-mark">🐾</span><span>PAWS <b>AI</b></span></a><span>Scan. Care. Rescue. <b>♥</b></span></footer>
+<script>
+document.getElementById("findForm").addEventListener("submit",e=>{e.preventDefault();const id=document.getElementById("animalId").value.trim();if(id)location.href="animal.html?id="+encodeURIComponent(id)});
+document.getElementById("menuButton").addEventListener("click",()=>document.getElementById("mobileNav").classList.toggle("hidden"));
+</script>
+</body></html>
